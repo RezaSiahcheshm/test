@@ -13,12 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create .ssh directory
-      run: |
-        mkdir -p ~/.ssh
-
     - name: Add server to known_hosts
       run: |
+        mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.SERVER }} >> ~/.ssh/known_hosts
 
     - name: Test SSH Connection
@@ -27,8 +24,6 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
-        echo "$SSH_PRIVATE_KEY" > private_key
-        chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$SERVER "uptime"
 
 
