@@ -22,8 +22,8 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
         ssh -i private_key $USERNAME@$SERVER <<EOF
-        uptime
-        df
+        "uptime"
+        "df"
         EOF
 
 # name:  Deploy Laravel Project
