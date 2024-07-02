@@ -90,6 +90,7 @@ jobs:
           ssh -i private_key -o StrictHostKeyChecking=no $USERNAME@$SERVER <<EOF
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker pull rezasiahcheshm/test:latest
+          cd /work
           docker-compose down
           docker-compose up -d
           EOF
