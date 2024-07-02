@@ -21,7 +21,10 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$SERVER "uptime"
+        ssh -i private_key $USERNAME@$SERVER <<EOF
+        uptime
+        df
+        EOF
 
 # name:  Deploy Laravel Project
 # run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
