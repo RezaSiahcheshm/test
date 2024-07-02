@@ -28,7 +28,7 @@
 #         chmod 600 private_key
 #         ssh -i private_key $USERNAME@$SERVER "uptime"
 
-name:  Deploy Laravel Project
+name: Deploy Laravel Project
 run-name: Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 on:
   workflow_dispatch:
@@ -60,12 +60,25 @@ jobs:
         context: .
         push: true
         tags: rezasiahcheshm/test:latest
-        
+
     - name: Add server to known_hosts
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.SERVER }} >> ~/.ssh/known_hosts
-        
+
+    - name: Install Docker and Docker Compose on server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER: ${{ secrets.SERVER }}
+        USERNAME: ${{ secrets.USERNAME }}
+      run: |
+        echo "$SSH_PRIVATE_KEY" > private_key
+        chmod 600 private_key
+        ssh -i private_key -o StrictHostKeyChecking=no $USERNAME@$SERVER <<EOF
+        sudo apt update
+        sudo apt install -y docker.io docker-compose
+        EOF
+
     - name: Deploy to server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -74,9 +87,8 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        ssh -i private_key  $USERNAME@$SERVER <<EOF
-        docker pull username/laravel-app:latest
+        ssh -i private_key -o StrictHostKeyChecking=no $USERNAME@$SERVER <<EOF
+        docker pull rezasiahcheshm/test:latest
         docker-compose down
         docker-compose up -d
         EOF
-
