@@ -84,14 +84,11 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER: ${{ secrets.SERVER }}
           USERNAME: ${{ secrets.USERNAME }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -i private_key -o StrictHostKeyChecking=no $USERNAME@$SERVER <<EOF
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-          cd /path/to/your/docker-compose-directory
           docker pull rezasiahcheshm/test:latest
           docker-compose down
           docker-compose up -d
