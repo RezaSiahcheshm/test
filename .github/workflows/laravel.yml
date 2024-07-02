@@ -21,7 +21,10 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        ssh -i private_key $USERNAME@$SERVER "uptime"
+        ssh -o StrictHostKeyChecking=no -T -i private_key $USERNAME@$SERVER <<EOF
+        "uptime"
+        EOF
+
 
 
 # name:  Deploy Laravel Project
