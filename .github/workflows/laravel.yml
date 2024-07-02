@@ -24,7 +24,7 @@ jobs:
         SERVER: ${{ secrets.SERVER }}
         USERNAME: ${{ secrets.USERNAME }}
       run: |
-        ssh -o StrictHostKeyChecking=no -i private_key $USERNAME@$SERVER "uptime"
+        ssh -i $SSH_PRIVATE_KEY $USERNAME@$SERVER "uptime"
 
 
 
