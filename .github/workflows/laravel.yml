@@ -31,15 +31,15 @@ jobs:
         push: true
         tags: rezasiahcheshm/test:latest
 
-    # - name: Deploy to server
-    #   env:
-    #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-    #     SERVER: ${{ secrets.SERVER }}
-    #     USERNAME: ${{ secrets.USERNAME }}
-    #   run: |
-    #     ssh -i $SSH_PRIVATE_KEY $USERNAME@$SERVER <<EOF
-    #     docker pull username/laravel-app:latest
-    #     docker-compose down
-    #     docker-compose up -d
-    #     EOF
+    - name: Deploy to server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SERVER: ${{ secrets.SERVER }}
+        USERNAME: ${{ secrets.USERNAME }}
+      run: |
+        ssh -i $SSH_PRIVATE_KEY $USERNAME@$SERVER <<EOF
+        docker pull username/laravel-app:latest
+        docker-compose down
+        docker-compose up -d
+        EOF
 
