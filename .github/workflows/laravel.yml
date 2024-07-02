@@ -54,12 +54,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: rezasiahcheshm/test:latest
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          push: true
+#          tags: rezasiahcheshm/test:latest
 
       - name: Add server to known_hosts
         run: |
@@ -90,7 +90,7 @@ jobs:
           ssh -i private_key -o StrictHostKeyChecking=no $USERNAME@$SERVER <<EOF
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker pull rezasiahcheshm/test:latest
-          cd /work
+          cd ~/work
           docker-compose down
           docker-compose up -d
           EOF
