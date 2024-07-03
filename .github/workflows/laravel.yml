@@ -34,23 +34,23 @@ jobs:
     needs: build
 
     steps:
-      - name: Add server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_ADDRESS }} >> ~/.ssh/known_hosts
+#      - name: Add server to known_hosts
+#        run: |
+#          mkdir -p ~/.ssh
+#          ssh-keyscan -H ${{ secrets.SERVER_ADDRESS }} >> ~/.ssh/known_hosts
 
-      - name: Install Docker and Docker Compose on server
-        env:
-          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-        run: |
-          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
-          ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
-            sudo apt update
-            sudo apt install -y docker.io docker-compose
-          EOF
+#      - name: Install Docker and Docker Compose on server
+#        env:
+#          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+#          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+#          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+#        run: |
+#          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
+#          chmod 600 private_key
+#          ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
+#            sudo apt update
+#            sudo apt install -y docker.io docker-compose
+#          EOF
 
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.3
@@ -58,22 +58,29 @@ jobs:
           host: ${{ secrets.SERVER_ADDRESS }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-          script: whoami
-
-      - name: Deploy to server
-        env:
-          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
-          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
-          ssh -i private_key $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
+          script: |
+            sudo apt update
+            sudo apt install -y docker.io docker-compose
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker pull rezasiahcheshm/test:latest
             cd ~/work
             docker-compose down
             docker-compose up -d
-          EOF
+
+#      - name: Deploy to server
+#        env:
+#          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+#          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+#          SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#        run: |
+#          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
+#          chmod 600 private_key
+#          ssh -i private_key $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
+#            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#            docker pull rezasiahcheshm/test:latest
+#            cd ~/work
+#            docker-compose down
+#            docker-compose up -d
+#          EOF
