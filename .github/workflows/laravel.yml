@@ -24,12 +24,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: rezasiahcheshm/test:latest
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: .
+#          push: true
+#          tags: rezasiahcheshm/test:latest
 
       - name: Add server to known_hosts
         run: |
@@ -38,7 +38,7 @@ jobs:
 
       - name: Install Docker and Docker Compose on server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           SERVER: ${{ secrets.SERVER_ADDRESS }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
         run: |
@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy to server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
         run: |
