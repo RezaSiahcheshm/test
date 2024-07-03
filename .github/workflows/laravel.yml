@@ -1,5 +1,6 @@
 name: Deploy Laravel Project
 run-name: Deploy by @${{ github.actor }}
+
 on:
   workflow_dispatch:
   push:
@@ -24,12 +25,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          push: true
-#          tags: rezasiahcheshm/test:latest
+      #      - name: Build and push Docker image
+      #        uses: docker/build-push-action@v2
+      #        with:
+      #          context: .
+      #          push: true
+      #          tags: rezasiahcheshm/test:latest
 
       - name: Add server to known_hosts
         run: |
@@ -38,29 +39,31 @@ jobs:
 
       - name: Install Docker and Docker Compose on server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-          SERVER: ${{ secrets.SERVER_ADDRESS }}
+          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
+          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
-          sudo apt update
-          sudo apt install -y docker.io docker-compose
+            sudo apt update
+            sudo apt install -y docker.io docker-compose
           EOF
 
       - name: Deploy to server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          SERVER_SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
+          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-          docker pull rezasiahcheshm/test:latest
-          cd ~/work
-          docker-compose down
-          docker-compose up -d
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            docker pull rezasiahcheshm/test:latest
+            cd ~/work
+            docker-compose down
+            docker-compose up -d
           EOF
