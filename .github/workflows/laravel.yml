@@ -65,7 +65,7 @@ jobs:
         run: |
           echo "$SERVER_SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
-          ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
+          ssh -i private_key $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker pull rezasiahcheshm/test:latest
             cd ~/work
