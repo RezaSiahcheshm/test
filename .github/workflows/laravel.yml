@@ -59,6 +59,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
           script_stop: true
+          debug: true
           script: |
             sudo apt update
             sudo apt install -y docker.io docker-compose
