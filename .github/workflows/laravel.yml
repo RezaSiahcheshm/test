@@ -43,5 +43,6 @@ jobs:
           docker pull rezasiahcheshm/test:latest
           pwd
           cd ../../../../work
+          pwd
           docker-compose down
           docker-compose up -d
