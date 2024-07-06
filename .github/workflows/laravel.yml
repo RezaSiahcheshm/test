@@ -45,9 +45,9 @@ jobs:
           SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
           SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
         run: |
-          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          ssh -i private_key -o StrictHostKeyChecking=no $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
+          ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_ADDRESS }} <<EOF
             sudo apt update
             sudo apt install -y docker.io docker-compose
           EOF
@@ -60,10 +60,10 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          echo "$SERVER_SSH_PRIVATE_KEY" > private_key
+          echo "${{ secrets.SERVER_SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          ssh -i private_key $SERVER_USERNAME@$SERVER_ADDRESS <<EOF
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          ssh -i private_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_ADDRESS }} <<EOF
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             docker pull rezasiahcheshm/test:latest
             cd ~/work
             docker-compose down
