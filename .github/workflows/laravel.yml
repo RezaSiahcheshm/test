@@ -24,7 +24,7 @@ jobs:
 
       - name: Log
         run: |
-          ls pw
+          pw
           ls -a ~/
           ls -a ./
           ls -a ../
