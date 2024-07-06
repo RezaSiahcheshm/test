@@ -25,10 +25,12 @@ jobs:
       - name: Log
         run: |
           pwd
-          ls -a ~/
           ls -a ./
+          echo 'sssssssssssssssssssss'
           ls -a ../
+          echo 'sssssssssssssssssssss'
           ls -a ../../
+          echo 'sssssssssssssssssssss'
           ls -a ../../../
 
 
