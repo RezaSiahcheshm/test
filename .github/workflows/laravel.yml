@@ -37,7 +37,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Install Docker and Docker Compose on server and Deploy to server
+      - name: Deploy to server
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
