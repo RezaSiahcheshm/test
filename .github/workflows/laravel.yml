@@ -33,12 +33,12 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#          docker-compose up -d --build
         run: |
           docker load -i test-latest.tar
           cd ../../../../work
           docker-compose down
           docker-compose up -d
-#          docker-compose up -d --build
           rm -f test-latest.tar
           docker image prune -f
           docker volume prune -f
