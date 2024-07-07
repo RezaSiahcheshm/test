@@ -38,3 +38,6 @@ jobs:
           cd ../../../../work
           docker-compose down
           docker-compose up --build
+          rm -f test-latest.tar
+          docker image prune -f
+          docker volume prune -f
