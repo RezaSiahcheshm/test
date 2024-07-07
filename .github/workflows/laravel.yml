@@ -36,10 +36,10 @@ jobs:
 #          docker-compose up -d --build
         run: |
           docker load -i test-latest.tar
+          rm -f test-latest.tar
           cd ../../../../work
           docker-compose down
           docker-compose up -d
-          rm -f test-latest.tar
           docker image prune -f
           docker container prune -f
           docker volume prune -f
