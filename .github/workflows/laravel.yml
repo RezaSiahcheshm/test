@@ -31,8 +31,9 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t local/test:latest .
+          docker build -t local/test:latest . --cache-from local/test:latest
           docker save -o test-latest.tar local/test:latest
+
 
 
   deploy:
