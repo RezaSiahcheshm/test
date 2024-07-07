@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+#          push: true
           tags: local/test:latest
 
 
