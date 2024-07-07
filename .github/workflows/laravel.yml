@@ -37,7 +37,9 @@ jobs:
         run: |
           docker load -i test-latest.tar
           rm -f test-latest.tar
-          cd ../../../../work
+          cd ../../../
+          rm -f ./_work
+          cd ../work
           docker-compose down
           docker-compose up -d
           docker image prune -f
