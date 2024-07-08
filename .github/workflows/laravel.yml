@@ -38,7 +38,7 @@ jobs:
           docker load -i test-latest.tar
           rm -f test-latest.tar
           cd ../../../
-          rm -f ./_work
+          rm -r ./_work
           cd ../work
           docker-compose down
           docker-compose up -d
