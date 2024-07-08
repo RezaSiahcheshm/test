@@ -30,12 +30,10 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          #          docker load -i test-latest.tar
         run: |
-          docker load -i test-latest.tar
-          rm -f test-latest.tar
-          cd ../../../
-          rm -r ./_work
-          cd ../work
+          rm -rf ../../../_work
+          cd ../../../../work
           docker-compose down
           docker-compose up -d --build
           docker image prune -f
