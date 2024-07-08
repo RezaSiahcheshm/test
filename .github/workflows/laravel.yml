@@ -37,7 +37,6 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx build --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache-new --tag local/test:latest .
-          docker save -o test-latest.tar local/test:latest
 
       - name: Save cache
         if: success()
@@ -50,9 +49,7 @@ jobs:
 
     steps:
       - name: Deploy to server
-          #          docker load -i test-latest.tar
         run: |
-          rm -rf ../../../_work
           cd ../../../../work
           docker-compose down
           docker-compose up -d --build
